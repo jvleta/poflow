@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script type="module">
+        import { css, html, LitElement } from 'https://unpkg.com/lit-element?module';
+    </script>
+    <title>Leta Technology</title>
+</head>
+
+<body>
+    <div x-data="{ open: false }">
+        <button @click="open = true">Expand</button>
+        <span x-show="open">
+            <simple-greeting name="World"></simple-greeting>
+        </span>
+    </div>
+    <footer-wrapper>hi mom</footer-wrapper>
+</body>
+
+<script src="src/app.js" type="module" defer></script>
+<script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js'; // If you enabled Analytics in your project, add the Firebase SDK for Google Analytics import { analytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
+    // Add Firebase products that you want to use import { auth } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js' import { firestore } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-firestore.js'
+</script>
+
+</html>
