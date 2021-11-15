@@ -1,10 +1,8 @@
-import FooterWrapper from './footer-wrapper.js';
-import HeaderWrapper from './header-wrapper.js';
-import SimpleGreeting from './simple-greeting.js';
+// import PoflowWrapper from './poflow-wrapper.js';
+// import SimpleGreeting from './simple-greeting.js';
 
-customElements.define('simple-greeting', SimpleGreeting);
-customElements.define('footer-wrapper', FooterWrapper);
-customElements.define('header-wrapper', HeaderWrapper);
+// customElements.define('simple-greeting', SimpleGreeting);
+// customElements.define('poflow-wrapper', PoflowWrapper);
 const int_sqrt = Module.cwrap('int_sqrt', 'number', ['number']);
 console.log(int_sqrt(4));
 // import { analytics } from
