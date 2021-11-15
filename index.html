@@ -8,23 +8,19 @@
     <script type="module">
         import { css, html, LitElement } from 'https://unpkg.com/lit-element?module';
     </script>
-    <title>Leta Technology</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>PoFlow</title>
 </head>
 
 <body>
-    <div x-data="{ open: false }">
-        <button @click="open = true">Expand</button>
-        <span x-show="open">
-            <simple-greeting name="World"></simple-greeting>
-        </span>
-    </div>
-    <footer-wrapper>hi mom</footer-wrapper>
+    <header-wrapper></header-wrapper>
+    <simple-greeting name="World"></simple-greeting>
+    <footer-wrapper>Leta Technology</footer-wrapper>
 </body>
-
+<script async type="text/javascript" src="src/wasm/function.js"></script>
 <script src="src/app.js" type="module" defer></script>
-<script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js'; // If you enabled Analytics in your project, add the Firebase SDK for Google Analytics import { analytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
-    // Add Firebase products that you want to use import { auth } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js' import { firestore } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-firestore.js'
-</script>
 
 </html>
