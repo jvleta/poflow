@@ -20,9 +20,25 @@
 
     <div class="left-sidebar">Left Sidebar</div>
 
-    <main></main>
+    <main>
 
-    <!-- <div class="right-sidebar">Right Sidebar</div> -->
+        <div x-data="{
+            search: '',
+            items: ['2:1 Ellipse', 'NACA-00142', 'NACA-00145'],
+            get filteredItems() {
+                return this.items.filter(
+                    i => i.startsWith(this.search)
+                )
+            }
+        }">
+            <input x-model="search" placeholder="Search...">
+            <ul>
+                <template x-for="item in filteredItems" :key="item">
+                    <li x-text="item"></li>
+                </template>
+            </ul>
+        </div>
+    </main>
 
     <footer>Leta Technology 2021</footer>
 
