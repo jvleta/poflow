@@ -1,3 +1,23 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js";
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyA7oxGdbv2i-fqEdNYG2D_fCpyfP96-uE0",
+    authDomain: "poflow-leta-tech.firebaseapp.com",
+    projectId: "poflow-leta-tech",
+    storageBucket: "poflow-leta-tech.appspot.com",
+    messagingSenderId: "545726653232",
+    appId: "1:545726653232:web:b2b8a27aba7f00235c9ef5",
+    measurementId: "G-GSENSHJ9BM"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+export const analytics = getAnalytics(app);
+export default app;
+
 // import PoflowWrapper from './poflow-wrapper.js';
 // import SimpleGreeting from './simple-greeting.js';
 

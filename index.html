@@ -4,7 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="//unpkg.com/alpinejs" defer></script>
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js"; // TODO: Add SDKs for Firebase products that you want to use // https://firebase.google.com/docs/web/setup#available-libraries // Your web app's Firebase configuration
+        const firebaseConfig = { apiKey: "AIzaSyDbtmCLKNIpSe6Oh7UFmaWL2Nz3TD8Sqpw", authDomain: "leta-tech-dev.firebaseapp.com", databaseURL: "https://leta-tech-dev-default-rtdb.firebaseio.com", projectId: "leta-tech-dev", storageBucket: "leta-tech-dev.appspot.com",
+        messagingSenderId: "712148337056", appId: "1:712148337056:web:573a9429f414a8dd5ca4c5" }; // Initialize Firebase const app = initializeApp(firebaseConfig);
+    </script>
     <link rel="stylesheet" href="./style.css">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -22,27 +27,19 @@
 
     <main>
 
-        <div x-data="{
-            search: '',
-            items: ['2:1 Ellipse', 'NACA-00142', 'NACA-00145'],
-            get filteredItems() {
-                return this.items.filter(
-                    i => i.startsWith(this.search)
-                )
-            }
-        }">
-            <input x-model="search" placeholder="Search...">
-            <ul>
-                <template x-for="item in filteredItems" :key="item">
-                    <li x-text="item"></li>
-                </template>
-            </ul>
-        </div>
+        <form autocomplete="off">
+            <div class="autocomplete" style="width:300px;">
+                <input id="myInput" type="text" name="selectedAirfoil">
+            </div>
+            <input type="submit">
+        </form>
+
     </main>
 
     <footer>Leta Technology 2021</footer>
 
 </body>
+
 <script async type="text/javascript" src="src/wasm/function.js"></script>
 <script src="src/app.js" type="module" defer></script>
 
