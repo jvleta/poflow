@@ -1,21 +1,34 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js";
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js';
+import { addDoc, collection, getFirestore } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-firestore.js'
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyA7oxGdbv2i-fqEdNYG2D_fCpyfP96-uE0",
-    authDomain: "poflow-leta-tech.firebaseapp.com",
-    projectId: "poflow-leta-tech",
-    storageBucket: "poflow-leta-tech.appspot.com",
-    messagingSenderId: "545726653232",
-    appId: "1:545726653232:web:b2b8a27aba7f00235c9ef5",
-    measurementId: "G-GSENSHJ9BM"
+    apiKey: 'AIzaSyA7oxGdbv2i-fqEdNYG2D_fCpyfP96-uE0',
+    authDomain: 'poflow-leta-tech.firebaseapp.com',
+    projectId: 'poflow-leta-tech',
+    storageBucket: 'poflow-leta-tech.appspot.com',
+    messagingSenderId: '545726653232',
+    appId: '1:545726653232:web:b2b8a27aba7f00235c9ef5',
+    measurementId: 'G-GSENSHJ9BM'
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore();
 export const analytics = getAnalytics(app);
+
+try {
+    const docRef = await addDoc(
+        collection(db, 'users'), { first: 'Ada', last: 'Lovelace2', born: 1815 });
+    console.log('Document written with ID: ', docRef.id);
+} catch (e) {
+    console.error('Error adding document: ', e);
+}
+
+
+
 export default app;
 
 // import PoflowWrapper from './poflow-wrapper.js';
