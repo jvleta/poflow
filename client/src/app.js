@@ -1,7 +1,22 @@
 import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js';
-import { addDoc, collection, getFirestore } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-firestore.js'
-
+// import { addDoc, collection, getFirestore } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-firestore.js'
+import { createApp } from "https://unpkg.com/petite-vue?module";
+createApp({ // Data
+    currentStep: 0,
+    submitted: false,
+    invalids: {},
+    fields: {
+        airfoiltype: {
+            label: "Airfoil Type",
+            value: "",
+            validations: [{
+                message: "Name is a required field",
+                test: (value) => value
+            }]
+        },
+    }
+}).mount("#multi-step-form");
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -19,35 +34,18 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore();
 export const analytics = getAnalytics(app);
 
-try {
-    const docRef = await addDoc(
-        collection(db, 'users'), { first: 'Ada', last: 'Lovelace2', born: 1815 });
-    console.log('Document written with ID: ', docRef.id);
-} catch (e) {
-    console.error('Error adding document: ', e);
-}
-
-
+// try {
+//     const docRef = await addDoc(
+//         collection(db, 'users'), { first: 'Ada', last: 'Lovelace2', born: 1815 });
+//     console.log('Document written with ID: ', docRef.id);
+// } catch (e) {
+//     console.error('Error adding document: ', e);
+// }
 
 export default app;
 
-// import PoflowWrapper from './poflow-wrapper.js';
-// import SimpleGreeting from './simple-greeting.js';
-
-// customElements.define('simple-greeting', SimpleGreeting);
-// customElements.define('poflow-wrapper', PoflowWrapper);
-const int_sqrt = Module.cwrap('int_sqrt', 'number', ['number']);
-console.log(int_sqrt(4));
-// import { analytics } from
-// 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
-// import { initializeApp } from
-// 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js'; import { auth }
-// from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js'; import {
-// firestore } from
-// 'https://www.gstatic.com/firebasejs/9.4.1/firebase-firestore.js'; const
-// firebaseConfig = {}; Initialize Firebase const app =
-// initializeApp(firebaseConfig); console.log(firebase); const auth =
-// app.auth();
+// const int_sqrt = Module.cwrap('int_sqrt', 'number', ['number']);
+// console.log(int_sqrt(4));
 
 const airfoils = [
     'NACA-0006', 'NACA-0008', 'NACA-0010', 'NACA-0015', 'NACA-0018', 'NACA-0021',
@@ -165,5 +163,7 @@ const autocomplete =
             closeAllLists(e.target);
         });
     }
+
+autocomplete(document.getElementById('myInput'), airfoils);
 
 autocomplete(document.getElementById('myInput'), airfoils);
