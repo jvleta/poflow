@@ -47,6 +47,17 @@ export default app;
 // const int_sqrt = Module.cwrap('int_sqrt', 'number', ['number']);
 // console.log(int_sqrt(4));
 
+const GetEllipseCoordinates = Module.cwrap('GetEllipseCoordinates', 'string', ['number', 'number']);
+const GetNaca00XXCoordinates = Module.cwrap('GetNaca00XXCoordinates', 'string', ['number', 'number']);
+
+console.log('ellipse');
+console.log(JSON.parse(GetEllipseCoordinates(10, 0.5)));
+console.log(JSON.parse(GetEllipseCoordinates(50, 0.5)));
+
+console.log('naca0006');
+console.log(JSON.parse(GetNaca00XXCoordinates(10, 0.06)));
+console.log(JSON.parse(GetNaca00XXCoordinates(50, 0.06)));
+
 const airfoils = [
     'NACA-0006', 'NACA-0008', 'NACA-0010', 'NACA-0015', 'NACA-0018', 'NACA-0021',
     'NACA-0024'
