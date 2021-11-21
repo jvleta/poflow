@@ -76,38 +76,37 @@
     <div class="left-sidebar">Left Sidebar</div>
 
     <main>
-
-        <form autocomplete="off">
-            <ul>
-                <li>
-                    <label>Airfoil Geometry</label>
-                    <div class="autocomplete">
-                        <input id="myInput" type="text" name="selectedAirfoil">
-                    </div>
-                    <input type="submit">
-                </li>
-                <li>
-                    <label>Horizontal Velocity (m/s)</label>
-                    <div class="autocomplete">
-                        <input id="vx" type="text" name="horizontalVelocity">
-                    </div>
-                </li>
-                <li>
-                    <label>Vertical Velocity (m/s)</label>
-                    <div class="autocomplete">
-                        <input id="vy" type="text" name="verticalVelocity">
-                    </div>
-                </li>
-                <li>
-                    <label>Number of panels</label>
-                    <div class="autocomplete">
-                        <input id="npanels" type="text" name="numPanels">
-                    </div>
-                </li>
-            </ul>
-
-        </form>
-
+        <div type="multi-step-form">
+            <form autocomplete="off">
+                <ul>
+                    <li>
+                        <label>Airfoil Geometry</label>
+                        <div class="autocomplete">
+                            <input id="myInput" type="text" name="selectedAirfoil">
+                        </div>
+                        <input type="submit">
+                    </li>
+                    <!-- <li>
+                        <label>Horizontal Velocity (m/s)</label>
+                        <div class="autocomplete">
+                            <input id="vx" type="text" name="horizontalVelocity">
+                        </div>
+                    </li>
+                    <li>
+                        <label>Vertical Velocity (m/s)</label>
+                        <div class="autocomplete">
+                            <input id="vy" type="text" name="verticalVelocity">
+                        </div>
+                    </li>
+                    <li>
+                        <label>Number of panels</label>
+                        <div class="autocomplete">
+                            <input id="npanels" type="text" name="numPanels">
+                        </div>
+                    </li> -->
+                </ul>
+            </form>
+        </div>
     </main>
 
     <footer>Leta Technology 2021</footer>
@@ -117,5 +116,6 @@
 <!-- <script async type="text/javascript" src="src/wasm/function.js"></script> -->
 <script async type="text/javascript" src="src/wasm/geometry.js"></script>
 <script src="src/app.js" type="module" defer></script>
+<script src="src/autocomplete.js" defer></script>
 
 </html>
