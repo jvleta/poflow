@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "serve": "firebase serve",
+        "start": "firebase serve",
         "deploy": "firebase deploy",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
