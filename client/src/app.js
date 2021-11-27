@@ -5,16 +5,31 @@ import { addDoc, collection, getFirestore } from 'https://www.gstatic.com/fireba
 
 import { firebaseConfig } from './config.js';
 import { GetEllipseCoordinates, GetNaca00XXCoordinates } from './poflow.js'
-import { autocomplete } from './autocomplete.js';
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 const db = getFirestore();
 export const analytics = getAnalytics(app);
 
+function PlotComponent(props) {
+    console.log(props);
+    return {
+        $template: '#plot-component-template',
+        step: props.step,
+        x: props.x,
+        y: props.y,
+        get step() {
+            return props.step;
+        },
+        mounted() {
+            console.log('i am so mounted');
+        }
+    };
+}
+
 function FieldComponent(props) {
     return {
-        $template: "#field-component-template",
+        $template: '#field-component-template',
         field: props.field,
         get isInvalid() {
             return props.isInvalid();
@@ -22,7 +37,6 @@ function FieldComponent(props) {
         get invalidMessage() {
             return props.invalidMessage();
         },
-        // methods
         validate() {
             nextTick(() => {
                 if (this.isInvalid) props.validate();
@@ -33,7 +47,7 @@ function FieldComponent(props) {
 
 function StepsIndicatorComponent(props) {
     return {
-        $template: "#step-indicator-component-template",
+        $template: '#step-indicator-component-template',
         stepsCount: props.stepsCount,
         get stepsCountWithSuccessPage() {
             return this.stepsCount + 1;
@@ -43,35 +57,54 @@ function StepsIndicatorComponent(props) {
 
 
 createApp({
+    PlotComponent,
     StepsIndicatorComponent,
     FieldComponent,
     currentStep: 0,
     submitted: false,
     invalids: {},
+
     fields: {
         airfoiltype: {
             id: 'myInput',
             label: 'Airfoil Type',
             value: '',
-            validations: [{ message: 'Name is a required field', test: (value) => value }]
+            validations: [{ message: 'Name is a required field', test: (value) => value }],
+            isSelectList: true,
+            validValues: {
+                '2:1 Ellipse': { type: 'ellipse', ratio: 0.5 },
+                'NACA-0006': { type: 'naca', ratio: 0.06 },
+                'NACA-0008': { type: 'naca', ratio: 0.08 }
+            }
         },
-        horizontalVelocity: {
-            id: '',
-            label: 'Horizontal Velocity',
-            value: '',
-            validations: []
-        },
-        verticalVelocity: {
-            id: '',
-            label: 'Vertical Velocity',
-            value: '',
-            validations: []
-        }
+        horizontalVelocity: { id: '', label: 'Horizontal Velocity', value: '', validations: [] },
+        verticalVelocity: { id: '', label: 'Vertical Velocity', value: '', validations: [] }
     },
+
     steps: [
         ['airfoiltype'],
         ['horizontalVelocity', 'verticalVelocity']
     ],
+
+    get doStuff() {
+        if (this.currentStep === 0) {
+            console.log('we should probably try to make the plot now');
+        } else {
+            console.log('aaaaahhhh');
+        }
+        const fieldValue = this.fields['airfoiltype'].value
+        const data = this.fields['airfoiltype'].validValues[fieldValue];
+        if (data) {
+            if (data.type === 'ellipse') {
+                console.log(GetEllipseCoordinates(10, data.ratio));
+            } else if (data.type === 'naca') {
+                console.log(GetNaca00XXCoordinates(10, data.ratio));
+            } else {
+                console.log('error');
+            }
+        }
+        return data;
+    },
     get currentFields() {
         return this.steps[this.currentStep];
     },
@@ -87,10 +120,14 @@ createApp({
 
     // Methods
     previousStep() {
+        console.log('you clicked previous');
+        console.log('isFirstStep', this.isFirstStep);
+        console.log('current step is', this.currentStep);
         if (this.isFirstStep) return;
         // removes all invalids so doesn't show error messages on back
         this.invalids = {};
         this.currentStep--;
+        console.log('current step is', this.currentStep);
     },
     nextStep() {
         if (this.isLastStep) return;
@@ -101,7 +138,6 @@ createApp({
     get isInvalid() {
         return !!Object.values(this.invalids).filter((key) => key).length;
     },
-    // methods
     validate() {
         this.invalids = {};
         // validates all the fields on the current page
@@ -124,87 +160,60 @@ createApp({
         // if form not valid don't submit
         this.validate();
         if (this.isInvalid) return;
-
         // submit on valid form
-        console.log("doing submit", this.fields);
+        console.log('doing submit', this.fields);
         this.submitted = true;
-    }
+    },
 
-}).mount('#multi-step-form');
-
-
-// try {
-//     const docRef = await addDoc(
-//         collection(db, 'users'), { first: 'Ada', last: 'Lovelace2', born:
-//         1815 });
-//     console.log('Document written with ID: ', docRef.id);
-// } catch (e) {
-//     console.error('Error adding document: ', e);
-// }
-
-console.log('ellipse');
-console.log(JSON.parse(GetEllipseCoordinates(10, 0.5)));
-console.log(JSON.parse(GetEllipseCoordinates(50, 0.5)));
-
-console.log('naca0006');
-console.log(JSON.parse(GetNaca00XXCoordinates(10, 0.06)));
-console.log(JSON.parse(GetNaca00XXCoordinates(50, 0.06)));
-
-const numPoints = 1000;
-const coords = JSON.parse(GetNaca00XXCoordinates(numPoints, 0.06));
-const x = coords.x;
-const y = coords.y;
-
-const points = [];
-for (let i = 0; i < numPoints; i++) {
-    points.push({ x: x[i], y: y[i] });
-}
-
-const data = {
-    datasets: [{
-        label: 'Scatter Dataset',
-        data: points,
-        backgroundColor: 'rgb(255, 99, 132)'
-    }],
-};
-
-const config = {
-    type: 'scatter',
-    data: data,
-    options: {
-        showLine: true,
-        borderWidth: 5,
-        borderColor: 'black',
-        pointRadius: 0,
-        scales: {
-            x: {
-                title: { font: { size: 24 }, display: true, text: 'x/L' },
-                type: 'linear',
-                position: 'bottom',
-                ticks: {
-                    font: {
-                        size: 22,
-                    }
-                },
-            },
-            y: {
-                type: 'linear',
-                ticks: {
-                    font: {
-                        size: 22,
-                    }
-                },
+    mounted: {
+        DrawCoords() {
+            const numPoints = 1000;
+            const coords = JSON.parse(GetNaca00XXCoordinates(numPoints, 0.06));
+            const x = coords.x;
+            const y = coords.y;
+            const points = [];
+            for (let i = 0; i < numPoints; i++) {
+                points.push({ x: x[i], y: y[i] });
             }
-        },
-        plugins: { legend: { display: false } }
+            const data = {
+                datasets: [{
+                    label: 'Scatter Dataset',
+                    data: points,
+                    backgroundColor: 'rgb(255, 99, 132)'
+                }],
+            };
+            const config = {
+                type: 'scatter',
+                data: data,
+                options: {
+                    showLine: true,
+                    borderWidth: 5,
+                    borderColor: 'black',
+                    pointRadius: 0,
+                    scales: {
+                        x: {
+                            title: { font: { size: 24 }, display: true, text: 'x/L' },
+                            type: 'linear',
+                            position: 'bottom',
+                            ticks: {
+                                font: {
+                                    size: 22,
+                                }
+                            },
+                        },
+                        y: {
+                            type: 'linear',
+                            ticks: {
+                                font: {
+                                    size: 22,
+                                }
+                            },
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            };
+            const myChart = new Chart(this.$refs.myChart, config);
+        }
     }
-
-};
-
-// const airfoils = [
-//     'NACA-0006', 'NACA-0008', 'NACA-0010', 'NACA-0015', 'NACA-0018', 'NACA-0021',
-//     'NACA-0024'
-// ];
-
-// autocomplete(document.getElementById('myInput'), airfoils);
-const myChart = new Chart(document.getElementById('myChart'), config);
+}).mount('#multi-step-form');
