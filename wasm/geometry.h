@@ -4,6 +4,8 @@
 #include <ostream>
 #include <vector>
 
+#include "json.hpp"
+
 namespace poflow {
 
 struct Coordinates {
@@ -27,5 +29,7 @@ struct Coordinates {
 
 Coordinates get_ellipse_coords(int num_points, double ratio);
 Coordinates get_naca00XX_coords(int num_points, double ratio);
+
+nlohmann::json coordinates_to_json(const Coordinates& coords);
 
 }; // namespace poflow

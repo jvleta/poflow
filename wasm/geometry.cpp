@@ -1,8 +1,9 @@
-#include "geometry.h"
-
 #include <iostream>
 
 #include "json.hpp"
+
+#include "geometry.h"
+
 
 namespace poflow {
 
