@@ -7,24 +7,15 @@ body {
 header {
     padding: 2rem;
     grid-column: 1 / 4;
-    border: 1px solid black;
 }
 
 .left-sidebar {
     grid-column: 1 / 2;
-    border: 1px solid black;
 }
 
 main {
     grid-column: 2 / 3;
-    border: 1px solid black;
 }
-
-
-/* .right-sidebar {
-    grid-column: 3 / 4;
-    border: 1px solid black;
-} */
 
 footer {
     padding: 2rem;
@@ -37,21 +28,11 @@ body {
     font-family: system-ui, sans-serif;
 }
 
-.left-sidebar,
-.right-sidebar {
-    padding: 1rem;
-}
-
-* {
-    box-sizing: border-box;
-}
-
 body {
     font: 16px Arial;
 }
 
 .autocomplete {
-    /*the container must be positioned relative:*/
     position: relative;
     display: inline-block;
 }
@@ -79,7 +60,6 @@ input[type="submit"] {
     border-bottom: none;
     border-top: none;
     z-index: 99;
-    /*position the autocomplete items to be the same width as the container:*/
     top: 100%;
     left: 0;
     right: 0;
@@ -93,21 +73,16 @@ input[type="submit"] {
 }
 
 .autocomplete-items div:hover {
-    /*when hovering an item:*/
     background-color: #e9e9e9;
 }
 
 .autocomplete-active {
-    /*when navigating through the items using the arrow keys:*/
     background-color: DodgerBlue !important;
     color: #ffffff;
 }
 
 form {
-    /* Center the form on the page */
     margin: 0 auto;
-    /* width: 500px; */
-    /* Form outline */
     padding: 1em;
 }
 
@@ -122,16 +97,13 @@ form li+li {
 }
 
 label {
-    /* Uniform size & alignment */
     display: inline-block;
     width: 200px;
     text-align: right;
 }
 
 .button {
-    /* Align buttons with the text fields */
-    padding-left: 200px;
-    /* same size as the label elements */
+     padding-left: 200px;
 }
 
 button {
