@@ -1,14 +1,12 @@
 import { createApp } from 'https://unpkg.com/petite-vue?module';
 import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-analytics.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js';
-import { addDoc, collection, getFirestore } from 'https://www.gstatic.com/firebasejs/9.4.1/firebase-firestore.js'
 
 import { firebaseConfig } from './config.js';
 import { GetEllipseCoordinates, GetNaca00XXCoordinates } from './poflow.js'
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-const db = getFirestore();
 export const analytics = getAnalytics(app);
 
 // petitevue
@@ -82,4 +80,3 @@ const config = {
     }
 
 };
-const myChart = new Chart(document.getElementById('myChart'), config);
