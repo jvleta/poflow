@@ -1,12 +1,11 @@
 {
-    "name": "poflow-ui",
+    "name": "poflow",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "firebase serve",
-        "deploy": "firebase deploy",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "http-server .",
+        "deploy": "firebase deploy"
     },
     "author": "",
     "license": "ISC"
