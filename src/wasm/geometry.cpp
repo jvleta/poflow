@@ -43,6 +43,7 @@ Coordinates get_naca00XX_coords(int num_points, double ratio) {
 
   int num_elements = num_points - 1;
   int num_elements_per_side = num_elements / 2;
+  
   double dtheta = M_PI / static_cast<double>(num_elements_per_side);
 
   auto compute_half_thickness = [](double x, double t) {
@@ -58,6 +59,7 @@ Coordinates get_naca00XX_coords(int num_points, double ratio) {
            (a1 * std::sqrt(x) + a2 * x + a3 * std::pow(x, 2.0) +
             a4 * std::pow(x, 3.0) + a5 * std::pow(x, 4.0));
   };
+  
   auto dx = 1.0 / num_elements_per_side;
   for (int i = 0; i < num_elements_per_side + 1; ++i) {
     xcoords[i] = i * dx;
