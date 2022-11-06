@@ -1,4 +1,4 @@
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyAxqZ8gFNSVmQjhaUPbSdzGAytXWu7LrVo",
   authDomain: "poflow-app.firebaseapp.com",
   projectId: "poflow-app",

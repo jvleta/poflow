@@ -8,6 +8,9 @@ export default defineConfig({
       formats: ['es']
     },
     rollupOptions: {
+      input: {
+        index: './index.html'
+      },
       external: /^lit/
     }
   }
