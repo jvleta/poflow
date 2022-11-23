@@ -1,3 +1,0 @@
-[submodule "src/poflow/pybind11"]
-	path = src/poflow/pybind11
-	url = https://github.com/pybind/pybind11.git
