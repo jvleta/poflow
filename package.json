@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "chartjs": "^0.3.24",
+    "eigen": "^0.2.1",
     "firebase": "^9.13.0",
     "petite-vue": "^0.4.1"
   },
