@@ -1,17 +1,20 @@
 <!-- App.svelte -->
-<script lang="ts">
-  import { onMount } from 'svelte';
-  import Plotly from 'plotly.js-dist';
+<script>
+  import { onMount } from "svelte";
+  import Plotly from "plotly.js-dist";
 
-  let nacaId = '2412'; // Default NACA ID
-  let coordinates: { x: number, y: number }[] = [];
+  let nacaId = "2412"; // Default NACA ID
+  let coordinates = [];
 
-  const nacaIds: string[] = [
-    '0012', '2412', '4412', '2415', // Sample NACA IDs
+  const nacaIds = [
+    "0012",
+    "2412",
+    "4412",
+    "2415", // Sample NACA IDs
     // Add more NACA IDs as needed
   ];
 
-  const calculateCoordinates = (): void => {
+  const calculateCoordinates = () => {
     // Calculate coordinates based on the selected NACA ID
     // You can replace this function with the appropriate NACA coordinate calculation logic
 
@@ -26,31 +29,31 @@
 
     // Plot the coordinates using Plotly
     const plotData = {
-      x: coordinates.map(coord => coord.x),
-      y: coordinates.map(coord => coord.y),
-      type: 'scatter',
-      mode: 'lines+markers',
+      x: coordinates.map((coord) => coord.x),
+      y: coordinates.map((coord) => coord.y),
+      type: "scatter",
+      mode: "lines+markers",
       name: `NACA ${nacaId}`,
     };
 
     const plotLayout = {
       title: `Coordinates for NACA ${nacaId}`,
-      xaxis: { title: 'X' },
-      yaxis: { title: 'Y' },
+      xaxis: { title: "X" },
+      yaxis: { title: "Y" },
     };
 
     const plotConfig = {
       responsive: true,
     };
 
-    Plotly.newPlot('plot', [plotData], plotLayout, plotConfig);
+    Plotly.newPlot("plot", [plotData], plotLayout, plotConfig);
   };
 
   onMount(() => {
     calculateCoordinates(); // Initial coordinate calculation
   });
 
-  const handleNacaIdChange = (): void => {
+  const handleNacaIdChange = () => {
     calculateCoordinates(); // Recalculate coordinates on NACA ID change
   };
 </script>
@@ -67,7 +70,7 @@
 
   <h2 id="plotTitle">Coordinates for NACA {nacaId}</h2>
 
-  <div id="plot"></div>
+  <div id="plot" />
 </main>
 
 <style>
