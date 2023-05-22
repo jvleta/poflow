@@ -3,27 +3,42 @@
   import { onMount } from "svelte";
   import Plotly from "plotly.js-dist";
 
-  let nacaId = "2412"; // Default NACA ID
+  let nacaId = "0012"; // Default NACA ID
   let coordinates = [];
 
   const nacaIds = [
     "0012",
-    "2412",
-    "4412",
-    "2415", // Sample NACA IDs
+    "0014",
+    "0016" // Sample NACA IDs
     // Add more NACA IDs as needed
   ];
 
   const calculateCoordinates = () => {
-    // Calculate coordinates based on the selected NACA ID
-    // You can replace this function with the appropriate NACA coordinate calculation logic
+    const thicknessToLengthRaio =
+      parseFloat(nacaId.substring(nacaId.length - 2)) / 100.0;
 
-    // Example code to calculate coordinates (modify as needed)
     coordinates = []; // Clear previous coordinates
+    for (let x = 0; x <= 1; x += 0.001) {
+      const y =
+        5.0 *
+        thicknessToLengthRaio *
+        (0.2969 * Math.sqrt(x) -
+          0.126 * x -
+          0.3516 * Math.pow(x, 2.0) +
+          0.2843 * Math.pow(x, 3.0) -
+          0.1015 * Math.pow(x, 4.0));
+      coordinates.push({ x, y });
+    }
 
-    // For simplicity, we'll just use a random set of coordinates
-    for (let x = 0; x <= 1; x += 0.1) {
-      const y = Math.random() * 0.2; // Generate random y-coordinate
+    for (let x = 0; x <= 1; x += 0.001) {
+      const y =
+        -5.0 *
+        thicknessToLengthRaio *
+        (0.2969 * Math.sqrt(x) -
+          0.126 * x -
+          0.3516 * Math.pow(x, 2.0) +
+          0.2843 * Math.pow(x, 3.0) -
+          0.1015 * Math.pow(x, 4.0));
       coordinates.push({ x, y });
     }
 
@@ -32,14 +47,15 @@
       x: coordinates.map((coord) => coord.x),
       y: coordinates.map((coord) => coord.y),
       type: "scatter",
-      mode: "lines+markers",
+      mode: "lines",
       name: `NACA ${nacaId}`,
     };
 
     const plotLayout = {
       title: `Coordinates for NACA ${nacaId}`,
       xaxis: { title: "X" },
-      yaxis: { title: "Y" },
+      yaxis: { title: "Y", range: [-0.2, 0.2] },
+      mode: 'lines'
     };
 
     const plotConfig = {
