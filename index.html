@@ -2,56 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PoFlow</title>
+    <title>Vite + Svelte</title>
   </head>
   <body>
-    <header>
-      <h1>PoFlow</h1>
-    </header>
-    <main>
-      <div id="multi-step-form">
-        <form>
-          <ul>
-            <li>
-              <label>Airfoil Geometry</label>
-              <div>
-                <input id="myInput" type="text" name="selectedAirfoil" />
-              </div>
-            </li>
-            <li>
-              <label>Horizontal Velocity (m/s)</label>
-              <div>
-                <input id="vx" type="text" name="horizontalVelocity" />
-              </div>
-            </li>
-            <li>
-              <label>Vertical Velocity (m/s)</label>
-              <div>
-                <input id="vy" type="text" name="verticalVelocity" />
-              </div>
-            </li>
-            <li>
-              <label>Number of panels</label>
-              <div>
-                <input id="npanels" type="text" name="numPanels" />
-              </div>
-            </li>
-            <li>
-              <label></label>
-              <div>
-                <input type="submit" />
-              </div>
-            </li>
-          </ul>
-        </form>
-      </div>
-      <div id="plot-container">
-        <canvas id="myChart"></canvas>
-      </div>
-    </main>
-    <footer>Leta Technology 2022</footer>
-    <script src="./main.js" type="module" defer></script>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
