@@ -1,15 +1,16 @@
 <!-- App.svelte -->
 <script>
   import { onMount } from "svelte";
-  import Plotly from "plotly.js-dist";
+  import Plotly from "plotly.js-dist-min";
 
   let nacaId = "0012";
-  let numElements = 10;
+  let numElementsInMesh = 10;
+  const numElementsForCoordinatesCurve = 10000;
   let coordinates = [];
 
-  const nacaIds = ["0012", "0014", "0016"];
+  const nacaIds = ["0006", "0012", "0015", "0018"];
 
-  const numElementOptions = [10, 12, 16, 18, 20];
+  const numElementOptions = [10, 12, 16, 18, 20, 30, 40, 50, 100];
 
   const linspace = (start, stop, num, endpoint = true) => {
     const div = endpoint ? num - 1 : num;
@@ -29,35 +30,36 @@
     );
   };
 
-  const calculateCoordinates = () => {
-    const ratio = parseFloat(nacaId.substring(nacaId.length - 2)) / 100.0;
-
-    const xgrid = linspace(0.0, 1.0, 1000);
-
+  const getPlotData = (ratio, numElementsInMesh) => {
+    const numElementsPerSide = numElementsInMesh / 2;
+    const xgrid = linspace(0.0, 1.0, numElementsPerSide + 1);
     coordinates = [];
     xgrid.forEach((x) => {
       const y = calculateNacaFourSeriesYCoordinate(ratio, x);
       coordinates.push({ x, y });
     });
 
-    coordinates.forEach((coord) => {
-      const x = coord.x;
-      const y = -coord.y;
+    xgrid.reverse().forEach((x) => {
+      const y = -1.0 * calculateNacaFourSeriesYCoordinate(ratio, x);
       coordinates.push({ x, y });
     });
 
-    const plotData = {
+    return {
       x: coordinates.map((coord) => coord.x),
       y: coordinates.map((coord) => coord.y),
-      type: "scatter",
-      mode: "lines",
-      name: `NACA ${nacaId}`,
     };
+  };
+
+  const calculateCoordinates = () => {
+    const ratio = parseFloat(nacaId.substring(nacaId.length - 2)) / 100.0;
+
+    const coordinatePlot = getPlotData(ratio, numElementsForCoordinatesCurve);
+    const meshPlot = getPlotData(ratio, numElementsInMesh);
 
     const plotLayout = {
       title: `Coordinates for NACA ${nacaId}`,
-      xaxis: { title: "X" },
-      yaxis: { title: "Y", range: [-0.2, 0.2] },
+      xaxis: { title: "x, position along the chord" },
+      yaxis: { range: [-0.12, 0.12] },
       mode: "lines",
     };
 
@@ -65,14 +67,34 @@
       responsive: true,
     };
 
-    Plotly.newPlot("plot", [plotData], plotLayout, plotConfig);
+    Plotly.newPlot(
+      "plot",
+      [
+        {
+          ...coordinatePlot,
+          type: "scatter",
+          mode: "lines",
+          name: `NACA ${nacaId}`,
+          line: { width: 5 },
+        },
+        {
+          ...meshPlot,
+          type: "scatter",
+          mode: "lines+markers",
+          name: `Mesh`,
+          line: { color: "red", width: 2 },
+        },
+      ],
+      plotLayout,
+      plotConfig
+    );
   };
 
   onMount(() => {
     calculateCoordinates();
   });
 
-  const handleNacaIdChange = () => {
+  const handleInputChanges = () => {
     calculateCoordinates();
   };
 
@@ -83,7 +105,7 @@
   <h1>NACA Airfoil Coordinate Plotter</h1>
 
   <label for="naca-id">Select NACA ID:</label>
-  <select id="naca-id" bind:value={nacaId} on:change={handleNacaIdChange}>
+  <select id="naca-id" bind:value={nacaId} on:change={handleInputChanges}>
     {#each nacaIds as id}
       <option value={id}>{id}</option>
     {/each}
@@ -91,24 +113,22 @@
   <label for="num-elements">Select number of elements:</label>
   <select
     id="num-elements"
-    bind:value={numElements}
-    on:change={handleNumElementsChange}
+    bind:value={numElementsInMesh}
+    on:change={handleInputChanges}
   >
     {#each numElementOptions as numElementOption}
       <option value={numElementOption}>{numElementOption}</option>
     {/each}
   </select>
 
-  <h2 id="plotTitle">Coordinates for NACA {nacaId}</h2>
-
   <div id="plot" />
 </main>
 
 <style>
   #plot {
-    width: 600px;
+    width: 800px;
     height: 400px;
-    margin: 20px auto;
+    padding: 50px;
   }
 
   label,
