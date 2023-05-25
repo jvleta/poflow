@@ -1,98 +1,152 @@
 <!-- App.svelte -->
 <script>
   import { onMount } from "svelte";
-  import Plotly from "plotly.js-dist";
+  import Plotly from "plotly.js-dist-min";
 
-  let nacaId = "0012"; // Default NACA ID
+  let nacaId = "0012";
+  let numElementsInMesh = 10;
+  const numElementsForCoordinatesCurve = 10000;
   let coordinates = [];
 
-  const nacaIds = [
-    "0012",
-    "0014",
-    "0016" // Sample NACA IDs
-    // Add more NACA IDs as needed
-  ];
+  const nacaIds = ["0006", "0012", "0015", "0018"];
 
-  const calculateCoordinates = () => {
-    const thicknessToLengthRaio =
-      parseFloat(nacaId.substring(nacaId.length - 2)) / 100.0;
+  const numElementOptions = [10, 12, 16, 18, 20, 30, 40, 50, 100];
 
-    coordinates = []; // Clear previous coordinates
-    for (let x = 0; x <= 1; x += 0.001) {
-      const y =
-        5.0 *
-        thicknessToLengthRaio *
-        (0.2969 * Math.sqrt(x) -
-          0.126 * x -
-          0.3516 * Math.pow(x, 2.0) +
-          0.2843 * Math.pow(x, 3.0) -
-          0.1015 * Math.pow(x, 4.0));
+  const linspace = (start, stop, num, endpoint = true) => {
+    const div = endpoint ? num - 1 : num;
+    const step = (stop - start) / div;
+    return Array.from({ length: num }, (_, i) => start + step * i);
+  };
+
+  const calculateNacaFourSeriesYCoordinate = (thicknessToLengthRaio, x) => {
+    return (
+      5.0 *
+      thicknessToLengthRaio *
+      (0.2969 * Math.sqrt(x) -
+        0.126 * x -
+        0.3516 * Math.pow(x, 2.0) +
+        0.2843 * Math.pow(x, 3.0) -
+        0.1015 * Math.pow(x, 4.0))
+    );
+  };
+
+  const getPlotData = (ratio, numElementsInMesh) => {
+    const numElementsPerSide = numElementsInMesh / 2;
+    const xgrid = linspace(0.0, 1.0, numElementsPerSide + 1);
+    coordinates = [];
+    xgrid.forEach((x) => {
+      const y = calculateNacaFourSeriesYCoordinate(ratio, x);
       coordinates.push({ x, y });
-    }
+    });
 
-    for (let x = 0; x <= 1; x += 0.001) {
-      const y =
-        -5.0 *
-        thicknessToLengthRaio *
-        (0.2969 * Math.sqrt(x) -
-          0.126 * x -
-          0.3516 * Math.pow(x, 2.0) +
-          0.2843 * Math.pow(x, 3.0) -
-          0.1015 * Math.pow(x, 4.0));
+    xgrid.reverse().forEach((x) => {
+      const y = -1.0 * calculateNacaFourSeriesYCoordinate(ratio, x);
       coordinates.push({ x, y });
-    }
+    });
 
-    // Plot the coordinates using Plotly
-    const plotData = {
+    return {
       x: coordinates.map((coord) => coord.x),
       y: coordinates.map((coord) => coord.y),
-      type: "scatter",
-      mode: "lines",
-      name: `NACA ${nacaId}`,
     };
+  };
+
+  const calculateCoordinates = () => {
+    const ratio = parseFloat(nacaId.substring(nacaId.length - 2)) / 100.0;
+
+    const coordinatePlot = getPlotData(ratio, numElementsForCoordinatesCurve);
+    const meshPlot = getPlotData(ratio, numElementsInMesh);
 
     const plotLayout = {
       title: `Coordinates for NACA ${nacaId}`,
-      xaxis: { title: "X" },
-      yaxis: { title: "Y", range: [-0.2, 0.2] },
-      mode: 'lines'
+      xaxis: { title: "x, position along the chord" },
+      yaxis: { range: [-0.12, 0.12] },
+      mode: "lines",
     };
 
     const plotConfig = {
       responsive: true,
     };
 
-    Plotly.newPlot("plot", [plotData], plotLayout, plotConfig);
+    Plotly.newPlot(
+      "plot",
+      [
+        {
+          ...coordinatePlot,
+          type: "scatter",
+          mode: "lines",
+          name: `NACA ${nacaId}`,
+          line: { width: 5 },
+        },
+        {
+          ...meshPlot,
+          type: "scatter",
+          mode: "lines+markers",
+          name: `Mesh`,
+          line: { color: "red", width: 2 },
+        },
+      ],
+      plotLayout,
+      plotConfig
+    );
   };
 
   onMount(() => {
-    calculateCoordinates(); // Initial coordinate calculation
+    calculateCoordinates();
   });
 
-  const handleNacaIdChange = () => {
-    calculateCoordinates(); // Recalculate coordinates on NACA ID change
+  const handleInputChanges = () => {
+    calculateCoordinates();
   };
+
+  const handleNumElementsChange = () => {};
 </script>
 
 <main>
   <h1>NACA Airfoil Coordinate Plotter</h1>
 
   <label for="naca-id">Select NACA ID:</label>
-  <select id="naca-id" bind:value={nacaId} on:change={handleNacaIdChange}>
+  <select id="naca-id" bind:value={nacaId} on:change={handleInputChanges}>
     {#each nacaIds as id}
       <option value={id}>{id}</option>
     {/each}
   </select>
-
-  <h2 id="plotTitle">Coordinates for NACA {nacaId}</h2>
+  <label for="num-elements">Select number of elements:</label>
+  <select
+    id="num-elements"
+    bind:value={numElementsInMesh}
+    on:change={handleInputChanges}
+  >
+    {#each numElementOptions as numElementOption}
+      <option value={numElementOption}>{numElementOption}</option>
+    {/each}
+  </select>
 
   <div id="plot" />
 </main>
 
 <style>
   #plot {
-    width: 600px;
+    width: 800px;
     height: 400px;
-    margin: 20px auto;
+    padding: 50px;
+  }
+
+  label,
+  select {
+    /* In order to define widths */
+    display: inline-block;
+  }
+
+  label {
+    width: 30%;
+    /* Positions the label text beside the input */
+    text-align: right;
+  }
+
+  label + select {
+    width: 30%;
+    /* Large margin-right to force the next element to the new-line
+           and margin-left to create a gutter between the label and input */
+    margin: 0 30% 0 4%;
   }
 </style>
