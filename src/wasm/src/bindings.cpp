@@ -2,7 +2,7 @@
 
 #include <emscripten/bind.h>
 
-#include "panel.h"
+#include "panel.hpp"
 
 using namespace emscripten;
 
