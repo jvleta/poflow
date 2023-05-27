@@ -2,7 +2,11 @@
 <script>
   import { onMount } from "svelte";
   import Plotly from "plotly.js-dist-min";
-
+  import {
+    linspace,
+    calculateNacaFourSeriesYCoordinate,
+  } from "./lib/poflow";
+  
   let nacaId = "0012";
   let numElementsInMesh = 10;
   const numElementsForCoordinatesCurve = 10000;
@@ -11,24 +15,6 @@
   const nacaIds = ["0006", "0012", "0015", "0018"];
 
   const numElementOptions = [10, 12, 16, 18, 20, 30, 40, 50, 100];
-
-  const linspace = (start, stop, num, endpoint = true) => {
-    const div = endpoint ? num - 1 : num;
-    const step = (stop - start) / div;
-    return Array.from({ length: num }, (_, i) => start + step * i);
-  };
-
-  const calculateNacaFourSeriesYCoordinate = (thicknessToLengthRaio, x) => {
-    return (
-      5.0 *
-      thicknessToLengthRaio *
-      (0.2969 * Math.sqrt(x) -
-        0.126 * x -
-        0.3516 * Math.pow(x, 2.0) +
-        0.2843 * Math.pow(x, 3.0) -
-        0.1015 * Math.pow(x, 4.0))
-    );
-  };
 
   const getPlotData = (ratio, numElementsInMesh) => {
     const numElementsPerSide = numElementsInMesh / 2;
