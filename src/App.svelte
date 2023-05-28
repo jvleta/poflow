@@ -1,12 +1,9 @@
 <!-- App.svelte -->
 <script>
   import { onMount } from "svelte";
-  import Plotly from "plotly.js-dist-min";
-  import {
-    linspace,
-    calculateNacaFourSeriesYCoordinate,
-  } from "./lib/poflow";
-  
+  import Plotly from "plotly.js-dist";
+  import { linspace, calculateNacaFourSeriesYCoordinate } from "./lib/poflow";
+
   let nacaId = "0012";
   let numElementsInMesh = 10;
   const numElementsForCoordinatesCurve = 10000;
@@ -41,6 +38,9 @@
 
     const coordinatePlot = getPlotData(ratio, numElementsForCoordinatesCurve);
     const meshPlot = getPlotData(ratio, numElementsInMesh);
+
+    console.log("calling panel");
+    console.log(Module.run_panel(JSON.stringify({ mesh: meshPlot })));
 
     const plotLayout = {
       title: `Coordinates for NACA ${nacaId}`,
