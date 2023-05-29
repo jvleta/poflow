@@ -15,9 +15,10 @@
 
   const numElementOptions = [10, 12, 16, 18, 20, 30, 40, 50, 100];
 
-  const getPlotData = (ratio, numElementsInMesh) => {
+  const getCoordinates = (ratio, numElementsInMesh) => {
     const numElementsPerSide = numElementsInMesh / 2;
     const xgrid = linspace(0.0, 1.0, numElementsPerSide + 1);
+    
     coordinates = [];
     xgrid.forEach((x) => {
       const y = calculateNacaFourSeriesYCoordinate(ratio, x);
@@ -35,20 +36,19 @@
     };
   };
 
-  const calculateCoordinates = () => {
+  const calculate = () => {
     const ratio = parseFloat(nacaId.substring(nacaId.length - 2)) / 100.0;
+    const coordinates = getCoordinates(ratio, numElementsForCoordinatesCurve);
+    const nodalCoordiantes = getCoordinates(ratio, numElementsInMesh);
 
-    const coordinatePlot = getPlotData(ratio, numElementsForCoordinatesCurve);
-    const meshPlot = getPlotData(ratio, numElementsInMesh);
-
-    const plotLayout = {
+    const geometryPlotLayout = {
       title: `Coordinates for NACA ${nacaId}`,
       xaxis: { title: "x, position along the chord" },
       yaxis: { range: [-0.12, 0.12] },
       mode: "lines",
     };
 
-    const plotConfig = {
+    const geometryPlotConfig = {
       responsive: true,
     };
 
@@ -56,31 +56,32 @@
       "plot",
       [
         {
-          ...coordinatePlot,
+          ...coordinates,
           type: "scatter",
           mode: "lines",
           name: `NACA ${nacaId}`,
           line: { width: 5 },
         },
         {
-          ...meshPlot,
+          ...nodalCoordiantes,
           type: "scatter",
           mode: "lines+markers",
           name: `Mesh`,
           line: { color: "red", width: 2 },
         },
       ],
-      plotLayout,
-      plotConfig
+      geometryPlotLayout,
+      geometryPlotConfig
     );
+    
   };
 
   onMount(() => {
-    calculateCoordinates();
+    calculate();
   });
 
   const handleInputChanges = () => {
-    calculateCoordinates();
+    calculate();
   };
 </script>
 

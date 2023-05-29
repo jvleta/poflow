@@ -4,6 +4,9 @@ const linspace = (start, stop, num, endpoint = true) => {
   return Array.from({ length: num }, (_, i) => start + step * i);
 };
 
+// const calculateYCoordinateForEllipse = (chordLengthRatio, x) => {
+//   return Math.sqrt()
+// }
 const calculateNacaFourSeriesYCoordinate = (thicknessToLengthRaio, x) => {
   return (
     5.0 *
