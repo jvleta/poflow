@@ -1,17 +1,16 @@
 <!-- App.svelte -->
 <script>
   import { onMount } from "svelte";
-  import Plotly from "plotly.js-dist-min";
-  import {
-    linspace,
-    calculateNacaFourSeriesYCoordinate,
-  } from "./lib/poflow";
-  
+  import Plotly from "plotly.js-dist";
+  import { linspace, calculateNacaFourSeriesYCoordinate } from "./lib/poflow";
+
+  let airfoilType = "Circle";
   let nacaId = "0012";
   let numElementsInMesh = 10;
-  const numElementsForCoordinatesCurve = 10000;
   let coordinates = [];
 
+  const numElementsForCoordinatesCurve = 10000;
+  const airfoilTypes = ["Circle", "2:1 Ellipse", "NACA 4-digit Series"];
   const nacaIds = ["0006", "0012", "0015", "0018"];
 
   const numElementOptions = [10, 12, 16, 18, 20, 30, 40, 50, 100];
@@ -83,19 +82,31 @@
   const handleInputChanges = () => {
     calculateCoordinates();
   };
-
-  const handleNumElementsChange = () => {};
 </script>
 
 <main>
-  <h1>NACA Airfoil Coordinate Plotter</h1>
+  <h1>PoFlow</h1>
+  <h2>An ideal solution to potential flow analysis</h2>
 
-  <label for="naca-id">Select NACA ID:</label>
-  <select id="naca-id" bind:value={nacaId} on:change={handleInputChanges}>
-    {#each nacaIds as id}
-      <option value={id}>{id}</option>
+  <label for="airfoil-type">Select an airfoil type:</label>
+  <select
+    id="airfoil-type"
+    bind:value={airfoilType}
+    on:change={handleInputChanges}
+  >
+    {#each airfoilTypes as type}
+      <option value={type}>{type}</option>
     {/each}
   </select>
+
+  {#if airfoilType === "NACA 4-digit Series"}
+    <label for="naca-id">Select NACA ID:</label>
+    <select id="naca-id" bind:value={nacaId} on:change={handleInputChanges}>
+      {#each nacaIds as id}
+        <option value={id}>{id}</option>
+      {/each}
+    </select>
+  {/if}
   <label for="num-elements">Select number of elements:</label>
   <select
     id="num-elements"
