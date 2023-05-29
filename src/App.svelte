@@ -1,4 +1,3 @@
-<!-- App.svelte -->
 <script>
   import { onMount } from "svelte";
   import Plotly from "plotly.js-dist";
@@ -6,6 +5,9 @@
 
   let nacaId = "0012";
   let numElementsInMesh = 10;
+  let horizontalVelocity = 1.0;
+  let veriticalVelocity = 0.0;
+
   const numElementsForCoordinatesCurve = 10000;
   let coordinates = [];
 
@@ -84,7 +86,6 @@
     calculateCoordinates();
   };
 
-  const handleNumElementsChange = () => {};
 </script>
 
 <main>
@@ -96,6 +97,7 @@
       <option value={id}>{id}</option>
     {/each}
   </select>
+
   <label for="num-elements">Select number of elements:</label>
   <select
     id="num-elements"
@@ -106,6 +108,20 @@
       <option value={numElementOption}>{numElementOption}</option>
     {/each}
   </select>
+
+  <label for="vx">Horizontal velocity (m/s):</label>
+  <input
+    id="vx"
+    bind:value={horizontalVelocity}
+    on:change={handleInputChanges}
+  >
+
+  <label for="vy">Vertical velocity (m/s):</label>
+  <input
+    id="vy"
+    bind:value={veriticalVelocity}
+    on:change={handleInputChanges}
+  >
 
   <div id="plot" />
 </main>
@@ -123,6 +139,12 @@
     display: inline-block;
   }
 
+  label,
+  input {
+    /* In order to define widths */
+    display: inline-block;
+  }
+
   label {
     width: 30%;
     /* Positions the label text beside the input */
@@ -131,6 +153,13 @@
 
   label + select {
     width: 30%;
+    /* Large margin-right to force the next element to the new-line
+           and margin-left to create a gutter between the label and input */
+    margin: 0 30% 0 4%;
+  }
+
+  label + input {
+    width: 29%;
     /* Large margin-right to force the next element to the new-line
            and margin-left to create a gutter between the label and input */
     margin: 0 30% 0 4%;
