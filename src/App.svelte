@@ -2,31 +2,51 @@
 <script>
   import { onMount } from "svelte";
   import Plotly from "plotly.js-dist";
-  import { linspace, calculateNacaFourSeriesYCoordinate } from "./lib/poflow";
+  import {
+    linspace,
+    AirfoilType,
+    calculateYCoordinateAtXForEllipse,
+    calculateYCoordinateAtXForNaca4Series,
+  } from "./lib/poflow";
+  import SelectList from "./lib/SelectList.svelte";
 
-  let airfoilType = "Circle";
+  let airfoilType = AirfoilType.Circle;
   let nacaId = "0012";
   let numElementsInMesh = 10;
   let coordinates = [];
-
+  let allCoordinates = [];
+  let nodalCoordiantes = [];
   const numElementsForCoordinatesCurve = 10000;
-  const airfoilTypes = ["Circle", "2:1 Ellipse", "NACA 4-digit Series"];
+  const airfoilTypes = [
+    AirfoilType.Circle,
+    AirfoilType.Ellipse,
+    AirfoilType.Naca4Series,
+  ];
   const nacaIds = ["0006", "0012", "0015", "0018"];
 
   const numElementOptions = [10, 12, 16, 18, 20, 30, 40, 50, 100];
 
-  const getCoordinates = (ratio, numElementsInMesh) => {
+  const getCoordinates = (calculateYCoordinateAtX, numElementsInMesh) => {
     const numElementsPerSide = numElementsInMesh / 2;
-    const xgrid = linspace(0.0, 1.0, numElementsPerSide + 1);
-    
+
+    const xgrid = (() => {
+      switch (airfoilType) {
+        case AirfoilType.Circle:
+        case AirfoilType.Ellipse:
+          return linspace(-1.0, 1.0, numElementsPerSide + 1);
+        case AirfoilType.Naca4Series:
+          return linspace(0.0, 1.0, numElementsPerSide + 1);
+      }
+    })();
+
     coordinates = [];
     xgrid.forEach((x) => {
-      const y = calculateNacaFourSeriesYCoordinate(ratio, x);
+      const y = calculateYCoordinateAtX(x);
       coordinates.push({ x, y });
     });
 
     xgrid.reverse().forEach((x) => {
-      const y = -1.0 * calculateNacaFourSeriesYCoordinate(ratio, x);
+      const y = -1.0 * calculateYCoordinateAtX(x);
       coordinates.push({ x, y });
     });
 
@@ -37,29 +57,67 @@
   };
 
   const calculate = () => {
-    const ratio = parseFloat(nacaId.substring(nacaId.length - 2)) / 100.0;
-    const coordinates = getCoordinates(ratio, numElementsForCoordinatesCurve);
-    const nodalCoordiantes = getCoordinates(ratio, numElementsInMesh);
-
-    const geometryPlotLayout = {
-      title: `Coordinates for NACA ${nacaId}`,
-      xaxis: { title: "x, position along the chord" },
-      yaxis: { range: [-0.12, 0.12] },
-      mode: "lines",
+    const calculateYCoordinateAtX = (x) => {
+      switch (airfoilType) {
+        case AirfoilType.Circle:
+          return calculateYCoordinateAtXForEllipse(1.0, x);
+        case AirfoilType.Ellipse:
+          return calculateYCoordinateAtXForEllipse(0.5, x);
+        case AirfoilType.Naca4Series:
+          const ratio = parseFloat(nacaId.substring(nacaId.length - 2)) / 100.0;
+          console.log(ratio);
+          return calculateYCoordinateAtXForNaca4Series(ratio, x);
+      }
     };
 
+    allCoordinates = getCoordinates(
+      calculateYCoordinateAtX,
+      numElementsForCoordinatesCurve
+    );
+    nodalCoordiantes = getCoordinates(
+      calculateYCoordinateAtX,
+      numElementsInMesh
+    );
+
+    const geometryPlotLayout = (() => {
+      const layout = {
+        xaxis: { title: "x, position along the chord" },
+        mode: "lines",
+      };
+
+      switch (airfoilType) {
+        case AirfoilType.Circle:
+          return {
+            ...layout,
+            title: `Coordinates for Circle`, 
+            width: 700,
+            height: 600
+          };
+          case AirfoilType.Ellipse:
+          return {
+            ...layout,
+            title: `Coordinates for Ellipse`, 
+          };
+          case AirfoilType.Naca4Series:
+          return {
+            ...layout,
+            title: `Coordinates for NACA ${nacaId}`,
+          };
+      }
+    })();
+
     const geometryPlotConfig = {
-      responsive: true,
+      responsive: true, width: 600, height: 600
     };
 
     Plotly.newPlot(
       "plot",
       [
         {
-          ...coordinates,
+          ...allCoordinates,
           type: "scatter",
           mode: "lines",
-          name: `NACA ${nacaId}`,
+          name: `Airfoil coordinates`,
           line: { width: 5 },
         },
         {
@@ -73,7 +131,6 @@
       geometryPlotLayout,
       geometryPlotConfig
     );
-    
   };
 
   onMount(() => {
@@ -100,13 +157,17 @@
     {/each}
   </select>
 
-  {#if airfoilType === "NACA 4-digit Series"}
-    <label for="naca-id">Select NACA ID:</label>
+  {#if airfoilType === AirfoilType.Naca4Series}
+    <!-- <SelectList value={nacaId} validValues={nacaIds} /> -->
+    
+    <label for="naca-id-label">Select NACA ID:</label>
+    
     <select id="naca-id" bind:value={nacaId} on:change={handleInputChanges}>
       {#each nacaIds as id}
         <option value={id}>{id}</option>
       {/each}
     </select>
+
   {/if}
   <label for="num-elements">Select number of elements:</label>
   <select
@@ -137,7 +198,7 @@
 
   label {
     width: 30%;
-    /* Positions the label text beside the input */
+    /* Positions the label text bes ide the input */
     text-align: right;
   }
 

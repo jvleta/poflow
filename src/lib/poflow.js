@@ -1,16 +1,24 @@
+const AirfoilType = {
+  Circle: "Circle",
+  Ellipse: "Ellipse",
+  Naca4Series: "Naca 4-digit series",
+};
+
 const linspace = (start, stop, num, endpoint = true) => {
   const div = endpoint ? num - 1 : num;
   const step = (stop - start) / div;
   return Array.from({ length: num }, (_, i) => start + step * i);
 };
 
-// const calculateYCoordinateForEllipse = (chordLengthRatio, x) => {
-//   return Math.sqrt()
-// }
-const calculateNacaFourSeriesYCoordinate = (thicknessToLengthRaio, x) => {
+const calculateYCoordinateAtXForEllipse = (ratio, x) => {
+  const theta = Math.acos(x);
+  return ratio * Math.sin(Math.PI - theta);
+};
+
+const calculateYCoordinateAtXForNaca4Series = (ratio, x) => {
   return (
     5.0 *
-    thicknessToLengthRaio *
+    ratio *
     (0.2969 * Math.sqrt(x) -
       0.126 * x -
       0.3516 * Math.pow(x, 2.0) +
@@ -19,14 +27,9 @@ const calculateNacaFourSeriesYCoordinate = (thicknessToLengthRaio, x) => {
   );
 };
 
-const panel = () =>{};
-const body =() => {};
-const matelm = () => {};
-const point = () => {};
-const survl = () => {};
-
-const dostuff = () => {
-  console.log("I am doing stuff");
+export {
+  linspace,
+  AirfoilType,
+  calculateYCoordinateAtXForEllipse,
+  calculateYCoordinateAtXForNaca4Series,
 };
-
-export { linspace, calculateNacaFourSeriesYCoordinate, dostuff };
