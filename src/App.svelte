@@ -1,6 +1,6 @@
-<!-- App.svelte -->
 <script>
   import { onMount } from "svelte";
+  import { Container, Form, FormGroup, Input, Label, Row } from "sveltestrap";
   import Plotly from "plotly.js-dist";
   import {
     linspace,
@@ -8,11 +8,11 @@
     calculateYCoordinateAtXForEllipse,
     calculateYCoordinateAtXForNaca4Series,
   } from "./lib/poflow";
-  import SelectList from "./lib/SelectList.svelte";
 
   let airfoilType = AirfoilType.Circle;
   let nacaId = "0012";
   let numElementsInMesh = 10;
+
   let coordinates = [];
   let allCoordinates = [];
   let nodalCoordiantes = [];
@@ -57,6 +57,8 @@
   };
 
   const calculate = () => {
+
+
     const calculateYCoordinateAtX = (x) => {
       switch (airfoilType) {
         case AirfoilType.Circle:
@@ -89,16 +91,14 @@
         case AirfoilType.Circle:
           return {
             ...layout,
-            title: `Coordinates for Circle`, 
-            width: 700,
-            height: 600
+            title: `Coordinates for Circle`,
           };
-          case AirfoilType.Ellipse:
+        case AirfoilType.Ellipse:
           return {
             ...layout,
-            title: `Coordinates for Ellipse`, 
+            title: `Coordinates for Ellipse`,
           };
-          case AirfoilType.Naca4Series:
+        case AirfoilType.Naca4Series:
           return {
             ...layout,
             title: `Coordinates for NACA ${nacaId}`,
@@ -107,7 +107,7 @@
     })();
 
     const geometryPlotConfig = {
-      responsive: true, width: 600, height: 600
+      responsive: true,
     };
 
     Plotly.newPlot(
@@ -137,75 +137,79 @@
     calculate();
   });
 
-  const handleInputChanges = () => {
+  const handleAirfoilTypeChange = (e) => {
+    airfoilType = e.target.value;
     calculate();
   };
+
+  const handleNacaIdChange = (e) => {
+    nacaId = e.target.value;
+    calculate();
+  };
+
+  const handleNumElementChange = (e) => {
+    numElementsInMesh = parseInt(e.target.value);
+    calculate();
+  };
+
 </script>
 
-<main>
-  <h1>PoFlow</h1>
-  <h2>An ideal solution to potential flow analysis</h2>
+<Container>
+  <main>
+    <Row>
+      <h1>PoFlow</h1>
+      <h2>An ideal solution to potential flow analysis</h2>
+    </Row>
 
-  <label for="airfoil-type">Select an airfoil type:</label>
-  <select
-    id="airfoil-type"
-    bind:value={airfoilType}
-    on:change={handleInputChanges}
-  >
-    {#each airfoilTypes as type}
-      <option value={type}>{type}</option>
-    {/each}
-  </select>
+    <Row>
+      <Form>
+        <FormGroup>
+          <Label for="airfoil-type">Select an airfoil type</Label>
+          <Input
+            type="select"
+            name="airfoilType"
+            id="airfoil-type"
+            on:change={handleAirfoilTypeChange}
+            bind:value={airfoilType}
+          >
+            {#each airfoilTypes as type}
+              <option value={type}>{type}</option>
+            {/each}
+          </Input>
+        </FormGroup>
 
-  {#if airfoilType === AirfoilType.Naca4Series}
-    <!-- <SelectList value={nacaId} validValues={nacaIds} /> -->
-    
-    <label for="naca-id-label">Select NACA ID:</label>
-    
-    <select id="naca-id" bind:value={nacaId} on:change={handleInputChanges}>
-      {#each nacaIds as id}
-        <option value={id}>{id}</option>
-      {/each}
-    </select>
+        {#if airfoilType === AirfoilType.Naca4Series}
+          <FormGroup>
+            <Label for="select">Select a NACA ID</Label>
+            <Input
+              type="select"
+              id="naca-id"
+              bind:value={nacaId}
+              on:change={handleNacaIdChange}
+            >
+              {#each nacaIds as id}
+                <option value={id}>{id}</option>
+              {/each}
+            </Input>
+          </FormGroup>
+        {/if}
 
-  {/if}
-  <label for="num-elements">Select number of elements:</label>
-  <select
-    id="num-elements"
-    bind:value={numElementsInMesh}
-    on:change={handleInputChanges}
-  >
-    {#each numElementOptions as numElementOption}
-      <option value={numElementOption}>{numElementOption}</option>
-    {/each}
-  </select>
+        <FormGroup>
+          <Label for="num-elements">Select number of elements</Label>
+          <Input
+            type="select"
+            id="num-elements"
+            bind:value={numElementsInMesh}
+            on:change={handleNumElementChange}
+          >
+            {#each numElementOptions as numElementOption}
+              <option value={numElementOption}>{numElementOption}</option>
+            {/each}
+          </Input>
+        </FormGroup>
+      </Form>
+    </Row>
 
-  <div id="plot" />
-</main>
-
-<style>
-  #plot {
-    width: 800px;
-    height: 400px;
-    padding: 50px;
-  }
-
-  label,
-  select {
-    /* In order to define widths */
-    display: inline-block;
-  }
-
-  label {
-    width: 30%;
-    /* Positions the label text bes ide the input */
-    text-align: right;
-  }
-
-  label + select {
-    width: 30%;
-    /* Large margin-right to force the next element to the new-line
-           and margin-left to create a gutter between the label and input */
-    margin: 0 30% 0 4%;
-  }
-</style>
+    <div id="plot" />
+  </main>
+</Container>
