@@ -1,3 +1,5 @@
+import Plotly from "plotly.js-dist";
+
 const AirfoilType = {
   Circle: "Circle",
   Ellipse: "Ellipse",
@@ -27,9 +29,99 @@ const calculateYCoordinateAtXForNaca4Series = (ratio, x) => {
   );
 };
 
+const getCoordinates2 = (poFlowInput) => {
+  const { airfoilType, nacaId, numElements } = poFlowInput;
+
+  const numElementsPerSize = numElements / 2;
+  const { xmin, xmax } = (() => {
+    switch (airfoilType) {
+      case AirfoilType.Circle:
+      case AirfoilType.Ellipse:
+        return { xmin: -1, xmax: 1 };
+      case AirfoilType.Naca4Series:
+        return { xmin: 0, xmax: 1 };
+    }
+  })();
+
+  const xtop = linspace(xmin, xmax, numElementsPerSize + 1);
+  const ytop = (() => {
+    switch (airfoilType) {
+      case AirfoilType.Circle:
+        return xtop.map((x) => calculateYCoordinateAtXForEllipse(1.0, x));
+      case AirfoilType.Ellipse:
+        return xtop.map((x) => calculateYCoordinateAtXForEllipse(0.5, x));
+      case AirfoilType.Naca4Series:
+        const ratio = parseFloat(nacaId.substring(nacaId.length - 2)) / 100.0;
+        return xvalues.map((x) =>
+          calculateYCoordinateAtXForNaca4Series(ratio, x)
+        );
+    }
+  })();
+
+  const xbottom = [...xtop.reverse()];
+  const ybottom = [...ytop.reverse().map((y) => -y)];
+
+  return {
+    x: [...xtop, ...xbottom],
+    y: [...ytop, ...ybottom],
+  };
+};
+
+const updatePlot = (poFlowInput, allCoordinates, nodalCoordiantes) => {
+  const geometryPlotLayout = (() => {
+    const layout = {
+      xaxis: { title: "x, position along the chord" },
+      mode: "lines",
+    };
+
+    switch (poFlowInput.airfoilType) {
+      case AirfoilType.Circle:
+        return {
+          ...layout,
+          title: `Coordinates for Circle`,
+        };
+      case AirfoilType.Ellipse:
+        return {
+          ...layout,
+          title: `Coordinates for Ellipse`,
+        };
+      case AirfoilType.Naca4Series:
+        return {
+          ...layout,
+          title: `Coordinates for NACA ${poFlowInput.nacaId}`,
+        };
+    }
+  })();
+
+  const geometryPlotConfig = {
+    responsive: true,
+  };
+
+  Plotly.newPlot(
+    "plot",
+    [
+      {
+        ...allCoordinates,
+        type: "scatter",
+        mode: "lines",
+        name: `Airfoil coordinates`,
+        line: { width: 5 },
+      },
+      {
+        ...nodalCoordiantes,
+        type: "scatter",
+        mode: "lines+markers",
+        name: `Mesh`,
+        line: { color: "red", width: 2 },
+      },
+    ],
+    geometryPlotLayout,
+    geometryPlotConfig
+  );
+};
+
 export {
-  linspace,
   AirfoilType,
-  calculateYCoordinateAtXForEllipse,
-  calculateYCoordinateAtXForNaca4Series,
+  getCoordinates2,
+  updatePlot
 };
