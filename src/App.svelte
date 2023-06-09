@@ -6,21 +6,22 @@
   import NacaIdInput from "./lib/NacaIdInput.svelte";
   import NumberOfElementsInput from "./lib/NumberOfElementsInput.svelte";
 
-  import { AirfoilType, getCoordinates2, updatePlot } from "./lib/poflow";
+  import { AirfoilType, getCoordinates, updatePlot } from "./lib/poflow";
 
   let airfoilType = AirfoilType.Circle;
   let nacaId = "0012";
   let numElementsInMesh = 10;
 
   const calculate = () => {
+    
     const powFlowInput = {
       airfoilType,
       nacaId,
       numElements: numElementsInMesh,
     };
     
-    const nodalCoordiantes = getCoordinates2(powFlowInput);
-    const allCoordinates = getCoordinates2({
+    const nodalCoordiantes = getCoordinates(powFlowInput);
+    const allCoordinates = getCoordinates({
       ...powFlowInput,
       numElements: 100000,
     });

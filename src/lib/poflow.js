@@ -29,7 +29,7 @@ const calculateYCoordinateAtXForNaca4Series = (ratio, x) => {
   );
 };
 
-const getCoordinates2 = (poFlowInput) => {
+const getCoordinates = (poFlowInput) => {
   const { airfoilType, nacaId, numElements } = poFlowInput;
 
   const numElementsPerSize = numElements / 2;
@@ -122,6 +122,6 @@ const updatePlot = (poFlowInput, allCoordinates, nodalCoordiantes) => {
 
 export {
   AirfoilType,
-  getCoordinates2,
+  getCoordinates,
   updatePlot
 };
