@@ -13,13 +13,12 @@
   let numElementsInMesh = 10;
 
   const calculate = () => {
-    
     const powFlowInput = {
       airfoilType,
       nacaId,
       numElements: numElementsInMesh,
     };
-    
+
     const nodalCoordiantes = getCoordinates(powFlowInput);
     const allCoordinates = getCoordinates({
       ...powFlowInput,
@@ -28,6 +27,8 @@
 
     updatePlot(powFlowInput, allCoordinates, nodalCoordiantes);
 
+    console.log("calling panel");
+    console.log(Module.run_panel(JSON.stringify({ mesh: nodalCoordiantes })));
 
   };
 
@@ -74,8 +75,7 @@
     </Row>
 
     <Row>
-      <div id="plot"></div>
+      <div id="plot" />
     </Row>
-    
   </main>
 </Container>
