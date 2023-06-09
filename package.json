@@ -15,7 +15,9 @@
     "vite-plugin-static-copy": "^0.15.0"
   },
   "dependencies": {
+    "bootstrap": "^5.3.0",
     "plotly.js": "^2.23.2",
-    "plotly.js-dist": "^2.23.2"
+    "plotly.js-dist": "^2.23.2",
+    "sveltestrap": "^5.10.0"
   }
 }
