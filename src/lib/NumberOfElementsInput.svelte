@@ -6,7 +6,7 @@
 </script>
 
 <FormGroup>
-  <Label for="num-elements">Select a NACA ID</Label>
+  <Label for="num-elements">Select a number of elements</Label>
   <Input
     type="select"
     id="num-elements"
