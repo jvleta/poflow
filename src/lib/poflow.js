@@ -52,18 +52,19 @@ const getCoordinates = (poFlowInput) => {
         return xtop.map((x) => calculateYCoordinateAtXForEllipse(0.5, x));
       case AirfoilType.Naca4Series:
         const ratio = parseFloat(nacaId.substring(nacaId.length - 2)) / 100.0;
-        return xvalues.map((x) =>
-          calculateYCoordinateAtXForNaca4Series(ratio, x)
-        );
+        return xtop.map((x) => calculateYCoordinateAtXForNaca4Series(ratio, x));
     }
   })();
 
-  const xbottom = [...xtop.reverse()];
-  const ybottom = [...ytop.reverse().map((y) => -y)];
-
+  const x = xtop;
+  const y = ytop;
+  for (let i = numElementsPerSize; i >= 0; i--) {
+    x.push(xtop[i]);
+    y.push(-ytop[i]);
+  }
   return {
-    x: [...xtop, ...xbottom],
-    y: [...ytop, ...ybottom],
+    x,
+    y,
   };
 };
 
