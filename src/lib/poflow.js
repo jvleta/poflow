@@ -73,23 +73,31 @@ const updatePlot = (poFlowInput, allCoordinates, nodalCoordiantes) => {
     const layout = {
       xaxis: { title: "x, position along the chord" },
       mode: "lines",
+      width: 600,
+      height: 600,
+      legend: {
+        x: 1,
+        xanchor: 'right',
+        y: 1
+      }
     };
 
     switch (poFlowInput.airfoilType) {
       case AirfoilType.Circle:
         return {
           ...layout,
-          title: `Coordinates for Circle`,
+          xaxis: {range: [-1.25, 1.25]},
+          yaxis: {range: [-1.25, 1.25]}
         };
       case AirfoilType.Ellipse:
         return {
           ...layout,
-          title: `Coordinates for Ellipse`,
+          xaxis: {range: [-1.25, 1.25]},
+          yaxis: {range: [-1.25, 1.25]}
         };
       case AirfoilType.Naca4Series:
         return {
           ...layout,
-          title: `Coordinates for NACA ${poFlowInput.nacaId}`,
         };
     }
   })();

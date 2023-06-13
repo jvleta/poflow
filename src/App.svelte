@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { Container, Form, Row } from "sveltestrap";
+  import { Container, Form, Row, Col } from "sveltestrap";
 
   import AirfoilTypeInput from "./lib/AirfoilTypeInput.svelte";
   import NacaIdInput from "./lib/NacaIdInput.svelte";
@@ -58,24 +58,26 @@
       <h1>PoFlow</h1>
       <h2>An ideal solution to potential flow analysis</h2>
     </Row>
-    <Row>
-      <Form>
-        <AirfoilTypeInput
-          {airfoilType}
-          changeHandler={handleAirfoilTypeChange}
-        />
-        {#if airfoilType === AirfoilType.Naca4Series}
-          <NacaIdInput {nacaId} changeHandler={handleNacaIdChange} />
-        {/if}
-        <NumberOfElementsInput
-          numElements={numElementsInMesh}
-          changeHandler={handleNumElementChange}
-        />
-      </Form>
-    </Row>
+    <Row style="border:1px solid black">
+      <Col>
+        <Form>
+          <AirfoilTypeInput
+            {airfoilType}
+            changeHandler={handleAirfoilTypeChange}
+          />
+          {#if airfoilType === AirfoilType.Naca4Series}
+            <NacaIdInput {nacaId} changeHandler={handleNacaIdChange} />
+          {/if}
+          <NumberOfElementsInput
+            numElements={numElementsInMesh}
+            changeHandler={handleNumElementChange}
+          />
+        </Form>
+      </Col>
 
-    <Row>
-      <div id="plot" />
+      <Col>
+        <div id="plot" />
+      </Col>
     </Row>
   </main>
 </Container>
