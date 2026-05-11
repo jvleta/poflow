@@ -1,11 +1,9 @@
 <script>
   import { onMount } from "svelte";
-  import { Container, Form, Row, Col } from "@sveltestrap/sveltestrap";
 
   import AirfoilTypeInput from "./lib/AirfoilTypeInput.svelte";
   import NacaIdInput from "./lib/NacaIdInput.svelte";
   import NumberOfElementsInput from "./lib/NumberOfElementsInput.svelte";
-  import AirfoilGeometryPlot from "./lib/AirfoilGeometryPlot.svelte";
 
   import { AirfoilType, getCoordinates2, updatePlot } from "./lib/poflow";
 
@@ -19,7 +17,7 @@
       nacaId,
       numElements: numElementsInMesh,
     };
-    
+
     const nodalCoordiantes = getCoordinates2(powFlowInput);
     const allCoordinates = getCoordinates2({
       ...powFlowInput,
@@ -27,7 +25,6 @@
     });
 
     updatePlot(powFlowInput, allCoordinates, nodalCoordiantes);
-
   };
 
   onMount(() => {
@@ -50,33 +47,40 @@
   };
 </script>
 
-<Container>
-  <main>
-    <Row>
-      <h1>PoFlow</h1>
-      <h2>An ideal solution to potential flow analysis</h2>
-    </Row>
-    <Row style="border:1px solid black">
-      <Col>
-        <Form>
-          <AirfoilTypeInput
-            {airfoilType}
-            changeHandler={handleAirfoilTypeChange}
-          />
-          {#if airfoilType === AirfoilType.Naca4Series}
-            <NacaIdInput {nacaId} changeHandler={handleNacaIdChange} />
-          {/if}
-          <NumberOfElementsInput
-            numElements={numElementsInMesh}
-            changeHandler={handleNumElementChange}
-          />
-        </Form>
-      </Col>
+<main>
+  <div>
+    <h1>PoFlow</h1>
+    <h2>An ideal solution to potential flow analysis</h2>
+  </div>
+  <div class="panel">
+    <div>
+      <form>
+        <AirfoilTypeInput
+          {airfoilType}
+          changeHandler={handleAirfoilTypeChange}
+        />
+        {#if airfoilType === AirfoilType.Naca4Series}
+          <NacaIdInput {nacaId} changeHandler={handleNacaIdChange} />
+        {/if}
+        <NumberOfElementsInput
+          numElements={numElementsInMesh}
+          changeHandler={handleNumElementChange}
+        />
+      </form>
+    </div>
+    <div id="plot"></div>
+  </div>
+</main>
 
-      <Col>
-        <div id="plot"></div>
-      </Col>
-    </Row>
-    
-  </main>
-</Container>
+<style>
+  main {
+    width: 100%;
+  }
+
+  .panel {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    border: 1px solid black;
+  }
+</style>

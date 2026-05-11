@@ -1,5 +1,4 @@
 <script>
-  import { FormGroup, Input, Label } from "@sveltestrap/sveltestrap";
   import { AirfoilType } from "./poflow";
   export let airfoilType = AirfoilType.Circle;
   export let changeHandler = () => {};
@@ -11,10 +10,9 @@
   ];
 </script>
 
-<FormGroup>
-  <Label for="airfoil-type">Select an airfoil type</Label>
-  <Input
-    type="select"
+<div>
+  <label for="airfoil-type">Select an airfoil type</label>
+  <select
     name="airfoilType"
     id="airfoil-type"
     on:change={changeHandler}
@@ -23,5 +21,5 @@
     {#each airfoilTypes as type}
       <option value={type}>{type}</option>
     {/each}
-  </Input>
-</FormGroup>
+  </select>
+</div>
