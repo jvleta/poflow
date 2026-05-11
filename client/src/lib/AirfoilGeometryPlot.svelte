@@ -1,4 +1,4 @@
-<div id="plot" />
+<div id="plot"></div>
 
 <script>
   import Plotly from "plotly.js-dist";

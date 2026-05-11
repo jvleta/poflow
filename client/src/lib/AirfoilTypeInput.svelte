@@ -1,5 +1,5 @@
 <script>
-  import { FormGroup, Input, Label } from "sveltestrap";
+  import { FormGroup, Input, Label } from "@sveltestrap/sveltestrap";
   import { AirfoilType } from "./poflow";
   export let airfoilType = AirfoilType.Circle;
   export let changeHandler = () => {};

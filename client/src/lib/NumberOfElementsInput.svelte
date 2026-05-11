@@ -1,5 +1,5 @@
 <script>
-  import { FormGroup, Input, Label } from "sveltestrap";
+  import { FormGroup, Input, Label } from "@sveltestrap/sveltestrap";
   export let numElements;
   export let changeHandler;
   const numElementOptions = [10, 12, 16, 18, 20, 30, 40, 50, 100];

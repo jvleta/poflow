@@ -1,5 +1,5 @@
 <script>
-  import { FormGroup, Input, Label } from "sveltestrap";
+  import { FormGroup, Input, Label } from "@sveltestrap/sveltestrap";
   export let nacaId;
   export let changeHandler;
   const nacaIds = ["0006", "0012", "0015", "0018"];

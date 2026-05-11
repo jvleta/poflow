@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { Container, Form, Row, Col } from "sveltestrap";
+  import { Container, Form, Row, Col } from "@sveltestrap/sveltestrap";
 
   import AirfoilTypeInput from "./lib/AirfoilTypeInput.svelte";
   import NacaIdInput from "./lib/NacaIdInput.svelte";
@@ -74,7 +74,7 @@
       </Col>
 
       <Col>
-        <div id="plot" />
+        <div id="plot"></div>
       </Col>
     </Row>
     
