@@ -25,3 +25,7 @@ dist-ssr
 
 # firebase
 .firebase
+
+# CMake build directories
+build/
+wasm/build/

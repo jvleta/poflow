@@ -1,0 +1,6 @@
+# Generated WASM output
+src/wasm/
+
+# Stale WASM files (output moved to src/wasm/)
+public/panel.js
+public/panel.wasm

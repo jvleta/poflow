@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import createPanel from "./wasm/panel.js";
 
   import AirfoilTypeInput from "./lib/AirfoilTypeInput.svelte";
   import NacaIdInput from "./lib/NacaIdInput.svelte";
@@ -27,7 +28,19 @@
     updatePlot(powFlowInput, allCoordinates, nodalCoordiantes);
   };
 
-  onMount(() => {
+  let greeting = '';
+
+  onMount(async () => {
+    try {
+      const panel = await createPanel();
+      console.log('panel:', panel);
+      console.log('greet fn:', panel.greet);
+      greeting = panel.greet('world');
+      console.log('greeting:', greeting);
+    } catch (e) {
+      console.error('wasm load failed:', e);
+    }
+
     calculate();
   });
 
@@ -51,6 +64,7 @@
   <div>
     <h1>PoFlow</h1>
     <h2>An ideal solution to potential flow analysis</h2>
+    {#if greeting}<p>{greeting}</p>{/if}
   </div>
   <div class="panel">
     <div>

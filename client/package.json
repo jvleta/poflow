@@ -11,7 +11,9 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.4",
     "svelte": "^5.55.5",
-    "vite": "^6.4.2"
+    "vite": "^6.4.2",
+    "vite-plugin-top-level-await": "^1.6.0",
+    "vite-plugin-wasm": "^3.6.0"
   },
   "dependencies": {
     "plotly.js-dist": "^3.5.1"
